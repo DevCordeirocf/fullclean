@@ -22,8 +22,7 @@ public class HibernateConfig {
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
-    private TenantIdentifierResolver tenantIdentifierResolver;
+
 
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
@@ -39,9 +38,9 @@ public class HibernateConfig {
 
         Map<String, Object> properties = new HashMap<>();
 
-        // Configuração crítica para Multi-tenant com filtro de dados (SCHEMA)
-        properties.put("hibernate.multiTenancy", "SCHEMA");
-        properties.put("hibernate.tenant_identifier_resolver", tenantIdentifierResolver);
+        // Configuração crítica para Multi-tenant com filtro de dados (SINGLE_DATABASE)
+
+
         properties.put("hibernate.hbm2ddl.auto", "update"); // Para o teste, pode ser "create" ou "update"
 
         em.setJpaPropertyMap(properties);
