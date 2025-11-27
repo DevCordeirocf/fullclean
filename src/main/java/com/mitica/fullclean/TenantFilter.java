@@ -24,7 +24,7 @@ public class TenantFilter extends OncePerRequestFilter {
 
         String tenantId = TenantContext.getTenantId();
 
-        if (tenantId != null) {
+        if (tenantId != null && !tenantId.trim().isEmpty()) {
             Session session = entityManager.unwrap(Session.class);
             org.hibernate.Filter filter = session.enableFilter("tenantFilter");
             filter.setParameter("tenantId", tenantId);
@@ -34,8 +34,7 @@ public class TenantFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } finally {
-            // A limpeza do TenantContext já é feita no TenantIdFilter, mas o filtro do Hibernate deve ser desabilitado
-            if (tenantId != null) {
+            if (tenantId != null && !tenantId.trim().isEmpty()) {
                 Session session = entityManager.unwrap(Session.class);
                 session.disableFilter("tenantFilter");
             }

@@ -1,8 +1,8 @@
 package com.mitica.fullclean;
 
-import org.hibernate.cfg.AvailableSettings;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -17,13 +17,12 @@ import java.util.Map;
 public class HibernateConfig {
 
     @Autowired
-    private DataSourceProperties dataSourceProperties;
+    private JpaProperties jpaProperties;
 
     @Autowired
     private DataSource dataSource;
 
-    @Autowired
-    private TenantIdentifierResolver tenantIdentifierResolver;
+
 
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
@@ -37,12 +36,12 @@ public class HibernateConfig {
         em.setPackagesToScan("com.mitica.fullclean"); // Pacote onde estão as entidades
         em.setJpaVendorAdapter(jpaVendorAdapter());
 
-        Map<String, Object> properties = new HashMap<>();
+        Map<String, Object> properties = new HashMap<>(jpaProperties.getProperties());
 
-        // Configuração crítica para Multi-tenant com filtro de dados (SCHEMA)
-        properties.put("hibernate.multiTenancy", "SCHEMA");
-        properties.put("hibernate.tenant_identifier_resolver", tenantIdentifierResolver);
-        properties.put("hibernate.hbm2ddl.auto", "update"); // Para o teste, pode ser "create" ou "update"
+        // Configuração JPA/Hibernate para Data Filtering (Isolamento por coluna)
+        // Não é necessário configurar multiTenancy para Data Filtering, o filtro faz o trabalho
+        // O filtro de Hibernate é ativado via TenantFilter.java
+        properties.put("hibernate.hbm2ddl.auto", "update");
 
         em.setJpaPropertyMap(properties);
         return em;
