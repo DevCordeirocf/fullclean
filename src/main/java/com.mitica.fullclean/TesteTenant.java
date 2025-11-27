@@ -1,20 +1,21 @@
 package com.mitica.fullclean;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.IdClass;
 import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.FilterDef;
 import org.hibernate.annotations.ParamDef;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
 
 import java.io.Serializable;
 import java.util.Objects;
 
+// 4.2. Usando anotações de chave composta para garantir o isolamento
 @Entity
-@IdClass(Joia.JoiaId.class)
+@IdClass(TesteTenant.TesteTenantId.class)
 @FilterDef(name = "tenantFilter", parameters = @ParamDef(name = "tenantId", type = String.class))
 @Filter(name = "tenantFilter", condition = "tenant_id = :tenantId")
-public class Joia {
+public class TesteTenant {
 
     @Id
     private String tenantId;
@@ -22,21 +23,17 @@ public class Joia {
     @Id
     private Long id;
 
-    private String nome;
-    private String sku;
-    private Double preco;
+    private String dado;
 
     // Construtor padrão
-    public Joia() {
+    public TesteTenant() {
     }
 
     // Construtor para facilitar a criação
-    public Joia(String tenantId, Long id, String nome, String sku, Double preco) {
+    public TesteTenant(String tenantId, Long id, String dado) {
         this.tenantId = tenantId;
         this.id = id;
-        this.nome = nome;
-        this.sku = sku;
-        this.preco = preco;
+        this.dado = dado;
     }
 
     // Getters e Setters
@@ -56,36 +53,20 @@ public class Joia {
         this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getDado() {
+        return dado;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getSku() {
-        return sku;
-    }
-
-    public void setSku(String sku) {
-        this.sku = sku;
-    }
-
-    public Double getPreco() {
-        return preco;
-    }
-
-    public void setPreco(Double preco) {
-        this.preco = preco;
+    public void setDado(String dado) {
+        this.dado = dado;
     }
 
     // Classe para a chave composta
-    public static class JoiaId implements Serializable {
+    public static class TesteTenantId implements Serializable {
         private String tenantId;
         private Long id;
 
-        public JoiaId() {
+        public TesteTenantId() {
         }
 
         // Getters, Setters, equals e hashCode
@@ -109,8 +90,8 @@ public class Joia {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            JoiaId joiaId = (JoiaId) o;
-            return Objects.equals(tenantId, joiaId.tenantId) && Objects.equals(id, joiaId.id);
+            TesteTenantId that = (TesteTenantId) o;
+            return Objects.equals(tenantId, that.tenantId) && Objects.equals(id, that.id);
         }
 
         @Override
