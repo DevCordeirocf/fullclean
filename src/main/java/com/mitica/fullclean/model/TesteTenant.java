@@ -1,4 +1,4 @@
-package fullcleanpackage;
+package com.mitica.fullclean.model;
 
 import jakarta.persistence.Entity;
 import org.hibernate.annotations.Filter;

@@ -1,4 +1,4 @@
-package fullcleanpackage;
+package com.mitica.fullclean.tenant;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,8 +31,7 @@ public class TenantIdFilter implements Filter {
             TenantContext.setTenantId(tenantId);
             chain.doFilter(request, response);
         } finally {
-            // 3.3. Limpeza OBRIGATÓRIA: Certifique-se de que o método TenantContext.clear() seja chamado.
-            TenantContext.clear();
+            
         }
     }
 
