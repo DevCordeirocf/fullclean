@@ -1,4 +1,4 @@
-package com.mitica.fullclean;
+package fullcleanpackage;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.stereotype.Component;

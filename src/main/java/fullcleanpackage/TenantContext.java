@@ -1,4 +1,4 @@
-package com.mitica.fullclean;
+package fullcleanpackage;
 
 public class TenantContext {
 

@@ -1,4 +1,4 @@
-package com.mitica.fullclean;
+package fullcleanpackage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class TesteTenantController {
 
     @GetMapping("/todos")
     public List<TesteTenant> buscarTodos() {
-        // O Hibernate deve filtrar automaticamente pelo Tenant ID do contexto
-        return repository.findAll();
-    }
+    // Agora, usamos a query que garante o uso do filtro do Hibernate
+    return repository.findAllWithTenantFilter(); // <--- Alterado
+}
 }
