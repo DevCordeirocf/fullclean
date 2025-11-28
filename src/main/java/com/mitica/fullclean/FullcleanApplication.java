@@ -1,9 +1,10 @@
-package fullcleanpackage;
+package com.mitica.fullclean;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import com.mitica.fullclean.tenant.TenantIdFilter;
 
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import lombok.experimental.SuperBuilder;

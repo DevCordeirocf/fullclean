@@ -1,5 +1,6 @@
-package fullcleanpackage;
+package com.mitica.fullclean.repository;
 
+import com.mitica.fullclean.model.TesteTenant;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;

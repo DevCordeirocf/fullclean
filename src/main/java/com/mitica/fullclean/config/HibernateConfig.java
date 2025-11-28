@@ -1,4 +1,4 @@
-package fullcleanpackage;
+package com.mitica.fullclean.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;

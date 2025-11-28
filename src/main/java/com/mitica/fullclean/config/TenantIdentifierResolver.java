@@ -1,7 +1,8 @@
-package fullcleanpackage;
+package com.mitica.fullclean.config;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.stereotype.Component;
+import com.mitica.fullclean.tenant.TenantContext;
 
 @Component
 public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver {
