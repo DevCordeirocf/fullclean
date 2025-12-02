@@ -3,11 +3,12 @@ package fullclean.service;
 import fullclean.entity.TesteTenant;
 import fullclean.repository.TesteTenantRepository;
 import fullclean.security.TenantContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
 
@@ -31,7 +32,6 @@ public class TesteTenantService {
     @Transactional
     public TesteTenant save(TesteTenant joia) {
         // Garante que o tenantId seja injetado no objeto antes de salvar
-        // Isso é necessário para a primeira inserção no banco de dados
         joia.setTenantId(TenantContext.getTenantId());
         return repository.save(joia);
     }
@@ -43,10 +43,14 @@ public class TesteTenantService {
      */
     @Transactional(readOnly = true)
     public List<TesteTenant> findAll() {
-        // O filtro do Hibernate deve ser habilitado na sessão do EntityManager
-        // Isso é feito pelo HibernateFilterConfig, mas o findAll() do JpaRepository
-        // pode não estar usando a sessão customizada corretamente em todos os casos.
-        // Vamos forçar a busca via EntityManager para garantir que o filtro seja aplicado.
-        return entityManager.createQuery("select t from TesteTenant t", TesteTenant.class).getResultList();
+        // CORREÇÃO: Ativar o filtro do Hibernate manualmente na sessão atual
+        // Isso é necessário porque o SessionCustomizer não é confiável para todas as operações do Spring Data JPA.
+        Session session = entityManager.unwrap(Session.class);
+        if (TenantContext.isSet()) {
+            session.enableFilter("tenantFilter")
+                   .setParameter("currentTenantId", TenantContext.getTenantId());
+        }
+        
+        return repository.findAll();
     }
 }

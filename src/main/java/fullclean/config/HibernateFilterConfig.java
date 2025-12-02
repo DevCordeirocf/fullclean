@@ -21,14 +21,8 @@ public class HibernateFilterConfig implements HibernatePropertiesCustomizer {
 
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
-        // 1. Adiciona o SessionCustomizer para habilitar o filtro
-        // A propriedade espera um Consumer<Session> no Spring Boot 3/4
-        hibernateProperties.put("hibernate.session_factory.session_customizer", (Consumer<Session>) session -> {
-            if (TenantContext.isSet()) {
-                session.enableFilter("tenantFilter")
-                       .setParameter("currentTenantId", TenantContext.getTenantId());
-            }
-        });
+// 1. A ativação do filtro será feita de forma imperativa no Service.
+        // O SessionCustomizer não é confiável para todas as operações do Spring Data JPA.
         
         // 2. Adiciona o CurrentTenantIdentifierResolver (embora não seja o padrão Multi-Tenant)
         // Isso garante que o Hibernate saiba que estamos em um contexto multi-tenant
