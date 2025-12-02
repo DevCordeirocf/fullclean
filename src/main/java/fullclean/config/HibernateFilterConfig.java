@@ -25,17 +25,20 @@ public class HibernateFilterConfig implements WebMvcConfigurer {
      * e o desabilita após a requisição.
      */
     private HandlerInterceptor tenantFilterInterceptor() {
-        return (request, response, handler) -> {
-            if (TenantContext.isSet()) {
-                SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-                Session session = sessionFactory.getCurrentSession();
+        return new HandlerInterceptor() {
+            @Override
+            public boolean preHandle(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response, Object handler) throws Exception {
+                if (TenantContext.isSet()) {
+                    SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
+                    Session session = sessionFactory.getCurrentSession();
 
-                // Habilita o filtro 'tenantFilter' definido na entidade TesteTenant
-                session.enableFilter("tenantFilter")
-                       // Define o parâmetro 'currentTenantId' com o valor do TenantContext
-                       .setParameter("currentTenantId", TenantContext.getTenantId());
+                    // Habilita o filtro 'tenantFilter' definido na entidade TesteTenant
+                    session.enableFilter("tenantFilter")
+                           // Define o parâmetro 'currentTenantId' com o valor do TenantContext
+                           .setParameter("currentTenantId", TenantContext.getTenantId());
+                }
+                return true;
             }
-            return true;
         };
     }
 
