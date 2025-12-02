@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-
 import java.util.List;
 
 /**
@@ -43,10 +42,13 @@ public class TesteTenantService {
      */
     @Transactional(readOnly = true)
     public List<TesteTenant> findAll() {
-        // O filtro do Hibernate deve ser habilitado na sessão do EntityManager
-        // Isso é feito pelo HibernateFilterConfig, mas o findAll() do JpaRepository
-        // pode não estar usando a sessão customizada corretamente em todos os casos.
-        // Vamos forçar a busca via EntityManager para garantir que o filtro seja aplicado.
-        return entityManager.createQuery("select t from TesteTenant t", TesteTenant.class).getResultList();
+        String tenantId = TenantContext.getTenantId();
+        
+        if (tenantId == null) {
+            throw new IllegalStateException("Tenant ID não está definido no contexto da requisição.");
+        }
+        
+        // Usa o método do repositório com query explícita para garantir o isolamento.
+        return repository.findAllByTenantId(tenantId);
     }
 }
