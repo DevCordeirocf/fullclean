@@ -1,13 +1,11 @@
 package fullclean.config;
 
 import fullclean.security.TenantContext;
-import org.hibernate.Session;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
-import java.util.function.Consumer;
 
 /**
  * HibernateFilterConfig - Configuração para habilitar o filtro de tenant
