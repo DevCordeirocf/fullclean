@@ -5,7 +5,6 @@ import fullclean.repository.TesteTenantRepository;
 import fullclean.security.TenantContext;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,14 +42,13 @@ public class TesteTenantService {
      */
     @Transactional(readOnly = true)
     public List<TesteTenant> findAll() {
-        // CORREÇÃO: Ativar o filtro do Hibernate manualmente na sessão atual
-        // Isso é necessário porque o SessionCustomizer não é confiável para todas as operações do Spring Data JPA.
-        Session session = entityManager.unwrap(Session.class);
-        if (TenantContext.isSet()) {
-            session.enableFilter("tenantFilter")
-                   .setParameter("currentTenantId", TenantContext.getTenantId());
+        String tenantId = TenantContext.getTenantId();
+        
+        if (tenantId == null) {
+            throw new IllegalStateException("Tenant ID não está definido no contexto da requisição.");
         }
         
-        return repository.findAll();
+        // Usa o método do repositório com query explícita para garantir o isolamento.
+        return repository.findAllByTenantId(tenantId);
     }
 }
