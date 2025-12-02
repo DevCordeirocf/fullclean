@@ -3,6 +3,7 @@ package fullclean.service;
 import fullclean.entity.TesteTenant;
 import fullclean.repository.TesteTenantRepository;
 import fullclean.security.TenantContext;
+import java.util.List;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
