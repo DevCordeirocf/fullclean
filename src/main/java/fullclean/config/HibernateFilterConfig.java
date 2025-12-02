@@ -1,62 +1,54 @@
 package fullclean.config;
 
 import fullclean.security.TenantContext;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.hibernate.Session;
-import org.hibernate.event.service.spi.EventListenerRegistry;
-import org.hibernate.event.spi.EventType;
-import org.hibernate.event.spi.PostLoadEvent;
-import org.hibernate.event.spi.PostLoadEventListener;
-import org.hibernate.event.spi.PreInsertEvent;
-import org.hibernate.event.spi.PreInsertEventListener;
-import org.hibernate.internal.SessionFactoryImpl;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-
-import jakarta.persistence.EntityManagerFactory;
-import java.util.Map;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * HibernateFilterConfig - Configuração para habilitar o filtro de tenant
- * de forma correta e automática no ciclo de vida do Hibernate.
+ * em todas as sessões do Hibernate.
  * 
- * CORREÇÃO: Usa HibernatePropertiesCustomizer para injetar um Interceptor
- * que habilita o filtro na Session.
+ * CORREÇÃO: Usa EntityManager para obter a Session do Hibernate.
  */
 @Configuration
-public class HibernateFilterConfig implements HibernatePropertiesCustomizer {
+public class HibernateFilterConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-    /**
-     * Customiza as propriedades do Hibernate para adicionar um Interceptor
-     * que habilita o filtro de tenant em cada Session.
-     */
-    @Override
-    public void customize(Map<String, Object> hibernateProperties) {
-        // Adiciona um listener para habilitar o filtro em cada nova Session
-        hibernateProperties.put("hibernate.session_factory.interceptor", new TenantFilterInterceptor());
-    }
+    // Injeta o EntityManager gerenciado pelo Spring
+    @PersistenceContext
+    private EntityManager entityManager;
 
     /**
-     * Interceptor que habilita o filtro do Hibernate na Session.
+     * Interceptor que habilita o filtro do Hibernate antes de cada requisição
+     * e o desabilita após a requisição.
+     * 
+     * NOTA: O filtro será habilitado para a Session que for usada na transação
+     * que se inicia após o interceptor.
      */
-    @Component
-    public static class TenantFilterInterceptor implements org.hibernate.Interceptor {
-
-        @Override
-        public void afterTransactionBegin(org.hibernate.Transaction tx) {
-            // Obtém a Session atual
-            Session session = tx.getSession();
-
+    private HandlerInterceptor tenantFilterInterceptor() {
+        return (request, response, handler) -> {
             if (TenantContext.isSet()) {
+                // Obtém a Session nativa do Hibernate a partir do EntityManager
+                Session session = entityManager.unwrap(Session.class);
+
                 // Habilita o filtro 'tenantFilter' definido na entidade TesteTenant
                 session.enableFilter("tenantFilter")
                        // Define o parâmetro 'currentTenantId' com o valor do TenantContext
                        .setParameter("currentTenantId", TenantContext.getTenantId());
             }
-        }
+            return true;
+        };
+    }
+
+    /**
+     * Registra o interceptor para ser executado em todas as requisições
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(tenantFilterInterceptor());
     }
 }

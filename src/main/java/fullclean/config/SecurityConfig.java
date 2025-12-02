@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * CRÍTICO: Garante que o TenantIdFilter seja executado antes de qualquer
  * regra de autorização do Spring Security.
  */
-//@Configuration
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
