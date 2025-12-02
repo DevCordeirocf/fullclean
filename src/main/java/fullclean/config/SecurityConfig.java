@@ -3,7 +3,7 @@ package fullclean.config;
 import fullclean.security.TenantIdFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,19 +15,21 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * CRÍTICO: Garante que o TenantIdFilter seja executado antes de qualquer
  * regra de autorização do Spring Security.
  */
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
 
-\n@Configuration\n@EnableWebSecurity
-public class SecurityConfig {\n\n    @Autowired\n    private TenantIdFilter tenantIdFilter;
-
+    @Autowired
+    private TenantIdFilter tenantIdFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             // Desabilita CSRF para facilitar testes com Postman/cURL
-            .csrf(AbstractHttpConfigurer::disable)
+            .csrf(csrf -> csrf.disable())
             // Adiciona o TenantIdFilter antes do filtro de autenticação padrão
-
-            .addFilterBefore(tenantIdFilter, UsernamePasswordAuthenticationFilter.class)\n            .authorizeHttpRequests(authorize -> authorize
+            .addFilterBefore(tenantIdFilter, UsernamePasswordAuthenticationFilter.class)
+            .authorizeHttpRequests(authorize -> authorize
                 // Permite acesso a todos os endpoints para fins de teste
                 .anyRequest().permitAll()
             );

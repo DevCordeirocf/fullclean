@@ -3,10 +3,11 @@ package fullclean.config;
 import fullclean.security.TenantContext;
 import org.hibernate.Session;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernatePropertiesCustomizer;
+import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * HibernateFilterConfig - Configuração para habilitar o filtro de tenant
@@ -21,7 +22,8 @@ public class HibernateFilterConfig implements HibernatePropertiesCustomizer {
     @Override
     public void customize(Map<String, Object> hibernateProperties) {
         // 1. Adiciona o SessionCustomizer para habilitar o filtro
-        hibernateProperties.put("hibernate.session_factory.session_customizer", (session) -> {
+        // A propriedade espera um Consumer<Session> no Spring Boot 3/4
+        hibernateProperties.put("hibernate.session_factory.session_customizer", (Consumer<Session>) session -> {
             if (TenantContext.isSet()) {
                 session.enableFilter("tenantFilter")
                        .setParameter("currentTenantId", TenantContext.getTenantId());
