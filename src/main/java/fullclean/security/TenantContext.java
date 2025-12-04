@@ -3,19 +3,6 @@ package fullclean.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * TenantContext - Contexto de Tenant usando ThreadLocal
- * 
- * Esta classe é o CORAÇÃO do isolamento multi-tenant.
- * Ela armazena o Tenant ID da requisição atual de forma segura,
- * garantindo que cada thread (requisição) tenha seu próprio contexto isolado.
- * 
- * Funcionamento:
- * 1. O TenantIdFilter extrai o X-Tenant-ID do header HTTP
- * 2. Armazena o ID aqui via setTenantId()
- * 3. O Hibernate Filter usa getTenantId() para filtrar as queries
- * 4. O filter limpa o contexto via clear() no bloco finally
- */
 public class TenantContext {
     
     private static final Logger logger = LoggerFactory.getLogger(TenantContext.class);

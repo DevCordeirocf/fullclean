@@ -41,6 +41,5 @@ public class TesteTenant {
 
     private String nome;
 
-    // 3. Campo de Isolamento Obrigatório
     private String tenantId;
 }
