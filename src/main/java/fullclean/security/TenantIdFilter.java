@@ -14,14 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
-/**
- * TenantIdFilter - Filtro de Servlet para extrair e validar o Tenant ID.
- * 
- * Este filtro é CRÍTICO para a segurança. Ele garante que:
- * 1. Toda requisição HTTP contenha o cabeçalho 'X-Tenant-ID'.
- * 2. O Tenant ID seja armazenado no TenantContext para uso posterior pelo Hibernate.
- * 3. O TenantContext seja limpo após o processamento da requisição.
- */
 @Component
 @Order(1) // Garante que este filtro seja executado primeiro
 public class TenantIdFilter implements Filter {

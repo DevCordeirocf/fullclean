@@ -9,12 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-/**
- * SecurityConfig - Configuração básica do Spring Security.
- * 
- * CRÍTICO: Garante que o TenantIdFilter seja executado antes de qualquer
- * regra de autorização do Spring Security.
- */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
