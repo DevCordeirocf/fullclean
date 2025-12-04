@@ -1,11 +1,13 @@
 package fullclean.controller;
 
+import fullclean.controller.dto.TesteTenantDTO;
 import fullclean.entity.TesteTenant;
 import fullclean.service.TesteTenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -16,9 +18,10 @@ public class TesteTenantController {
     @Autowired
     private TesteTenantService service;
 
-
     @PostMapping
-    public ResponseEntity<TesteTenant> create(@RequestBody TesteTenant joia) {
+    public ResponseEntity<TesteTenant> create(@Valid @RequestBody TesteTenantDTO joiaDto) {
+        TesteTenant joia = new TesteTenant();
+        joia.setNome(joiaDto.getNome());
         TesteTenant savedJoia = service.save(joia);
         return new ResponseEntity<>(savedJoia, HttpStatus.CREATED);
     }

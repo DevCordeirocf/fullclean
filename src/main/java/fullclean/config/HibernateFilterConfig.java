@@ -23,11 +23,11 @@ public class HibernateFilterConfig implements HibernatePropertiesCustomizer {
         });
         
 
+        // Removido fallback DEFAULT_TENANT para evitar mascaramento de requisições sem tenant
         hibernateProperties.put("hibernate.tenant_identifier_resolver", new CurrentTenantIdentifierResolver() {
             @Override
             public String resolveCurrentTenantIdentifier() {
-                String tenantId = TenantContext.getTenantId();
-                return tenantId != null ? tenantId : "DEFAULT_TENANT"; // Retorna um valor padrão se não estiver definido
+                return TenantContext.getTenantId();
             }
 
             @Override
