@@ -5,6 +5,7 @@ import fullclean.domain.model.Estoque;
 import fullclean.domain.repository.EstoqueRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import fullclean.exception.ResourceNotFoundException;
 
 @Service
 public class EstoqueService {
@@ -30,7 +31,7 @@ public class EstoqueService {
 
         // 1. Busca e TRAVA a linha no banco (Lock Pessimista)
         Estoque estoque = repository.findByProdutoIdAndTenantId(produtoId, tenantId)
-                .orElseThrow(() -> new RuntimeException("Estoque não encontrado para produto: " + produtoId));
+                .orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado para produto: " + produtoId));
 
         // 2. Verifica se tem saldo real (Disponivel - Já Reservado)
         int saldoReal = estoque.getQuantidadeDisponivel() - estoque.getQuantidadeReservada();
@@ -48,6 +49,6 @@ public class EstoqueService {
 
     public Estoque consultarEstoque(String produtoId) {
         return repository.findByProdutoId(produtoId)
-                .orElseThrow(() -> new RuntimeException("Estoque não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Estoque não encontrado"));
     }
 }
