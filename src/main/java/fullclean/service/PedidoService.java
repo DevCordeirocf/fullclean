@@ -35,7 +35,7 @@ public class PedidoService {
             ItemPedido item = new ItemPedido(
                 itemData.produtoId(),
                 itemData.quantidade(),
-                new BigDecimal("100.00") // TODO: Buscar preço real do MongoDB
+                new BigDecimal("100.00") 
             );
             
             pedido.adicionarItem(item);

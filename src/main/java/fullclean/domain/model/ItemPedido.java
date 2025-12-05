@@ -16,13 +16,19 @@ public class ItemPedido {
     private Pedido pedido;
 
     @Column(nullable = false)
-    private String produtoId; // ID do MongoDB
+    private String produtoId; 
 
     @Column(nullable = false)
     private Integer quantidade;
 
     @Column(nullable = false)
     private BigDecimal precoUnitario;
+
+    @Column(nullable = false)
+    private String nomeProdutoSnapshot; 
+
+    @Column(nullable = true)
+    private String urlImagemSnapshot;
 
     // Construtores
     public ItemPedido() {}
