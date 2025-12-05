@@ -1,0 +1,167 @@
+{
+  "info": {
+    "name": "Fullclean API",
+    "_postman_id": "fullclean-collection",
+    "description": "Coleção para testar os endpoints do projeto Fullclean (usar header X-Tenant-ID)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Inicializar Estoque (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Tenant-ID",
+            "value": "{{tenantId}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/estoque?produtoId=ABC123&qtd=10",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "estoque"
+          ],
+          "query": [
+            {
+              "key": "produtoId",
+              "value": "ABC123"
+            },
+            {
+              "key": "qtd",
+              "value": "10"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Consultar Estoque (GET)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Tenant-ID",
+            "value": "{{tenantId}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/estoque/ABC123",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "estoque",
+            "ABC123"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Criar Pedido (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Tenant-ID",
+            "value": "{{tenantId}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[ { \"produtoId\": \"ABC123\", \"quantidade\": 2 }, { \"produtoId\": \"XYZ987\", \"quantidade\": 1 } ]",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/pedidos",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "pedidos"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Criar TesteTenant (POST)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "X-Tenant-ID",
+            "value": "{{tenantId}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"nome\": \"Minha Joia\" }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/teste-tenant",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "teste-tenant"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Listar TesteTenant (GET)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Tenant-ID",
+            "value": "{{tenantId}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/teste-tenant",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "teste-tenant"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "tenantId",
+      "value": "tenant1"
+    }
+  ]
+}

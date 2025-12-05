@@ -1,4 +1,4 @@
-package fullclean.entity;
+package fullclean.domain.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

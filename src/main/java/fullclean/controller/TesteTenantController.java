@@ -1,7 +1,7 @@
 package fullclean.controller;
 
 import fullclean.controller.dto.TesteTenantDTO;
-import fullclean.entity.TesteTenant;
+import fullclean.domain.model.TesteTenant;
 import fullclean.service.TesteTenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
