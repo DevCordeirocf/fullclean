@@ -1,7 +1,7 @@
 package fullclean.service;
 
-import fullclean.entity.TesteTenant;
-import fullclean.repository.TesteTenantRepository;
+import fullclean.domain.model.TesteTenant;
+import fullclean.domain.repository.TesteTenantRepository;
 import fullclean.security.TenantContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
